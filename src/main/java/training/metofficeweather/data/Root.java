@@ -4,5 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Root {
 	@JsonProperty("Locations")
-	public Locations locations;
+	public LocationsList locations;
+
+	@Override
+	public String toString() {
+		return "Root{" +
+				"locations=" + locations +
+				'}';
+	}
 }

@@ -10,4 +10,18 @@ public class Locations {
 	public String unitaryAuthArea;
 	public String obsSource;
 	public String nationalPark;
+
+	@Override
+	public String toString() {
+		return "Locations{" + "elevation='" + elevation + '\'' +
+				", id='" + id + '\'' +
+				", latitude='" + latitude + '\'' +
+				", longitude='" + longitude + '\'' +
+				", name='" + name + '\'' +
+				", region='" + region + '\'' +
+				", unitaryAuthArea='" + unitaryAuthArea + '\'' +
+				", obsSource='" + obsSource + '\'' +
+				", nationalPark='" + nationalPark + '\'' +
+				'}';
+	}
 }
