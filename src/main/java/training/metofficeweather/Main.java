@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String args[]) throws IOException {
@@ -27,7 +28,9 @@ public class Main {
         Root root = mapper.readValue(responseStream, Root.class);
 
         // Finally we have the response
-        PrintAllLocations(root);
+
+//        PrintAllLocations(root);   <-- works
+        UserInterface(root);     // asks for user input and print out desired location
 
     }
 
@@ -38,4 +41,23 @@ public class Main {
         });
 
     }
+
+    public static void UserInterface(Root root){
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("What location are you interested in?:");
+        String input = scanner.nextLine();
+
+        // need to search for input location and print the required info
+        root.locations.location.forEach(e -> {
+
+            // shud print all related detail to location input
+            if (input.equals(e.name)) {
+                System.out.println(e);
+            }
+                });
+
+    }
+
+
 }	

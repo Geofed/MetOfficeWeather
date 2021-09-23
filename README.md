@@ -8,8 +8,8 @@ Independent copy of MetOffice Java Bootcamp exercise The main branch is a starti
   * [x] marshal into data structures
   * [X] pretty print
 * Gather users location Choice
-  * [ ] Print prompt
-  * [ ] Readline
+  * [X] Print prompt
+  * [X] Readline
   * [ ] Split readline
   * [ ] query the data
 * Return data
