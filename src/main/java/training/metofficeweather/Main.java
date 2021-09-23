@@ -18,6 +18,7 @@ public class Main {
 
         // Now it's "open", we can set the request method, headers etc.
         connection.setRequestProperty("accept", "application/json");
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36");
 
         // This line makes the request
         InputStream responseStream = connection.getInputStream();
