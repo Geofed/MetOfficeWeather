@@ -13,15 +13,14 @@ public class Locations {
 
 	@Override
 	public String toString() {
-		return "Locations{" + "elevation='" + elevation + '\'' +
-				", id='" + id + '\'' +
-				", latitude='" + latitude + '\'' +
-				", longitude='" + longitude + '\'' +
-				", name='" + name + '\'' +
-				", region='" + region + '\'' +
-				", unitaryAuthArea='" + unitaryAuthArea + '\'' +
-				", obsSource='" + obsSource + '\'' +
-				", nationalPark='" + nationalPark + '\'' +
-				'}';
+		return  "elevation = '" + elevation + '\'' +
+				"\nid = '" + id + '\'' +
+				"\nlatitude = '" + latitude + '\'' +
+				"\nlongitude = '" + longitude + '\'' +
+				"\nname = '" + name + '\'' +
+				"\nregion = '" + region + '\'' +
+				"\nunitaryAuthArea = '" + unitaryAuthArea + '\'' +
+				(obsSource == null ? "" : "\n, obsSource='" + obsSource) + '\'' +
+				(nationalPark == null ? "" : "\n, nationalPark='" + nationalPark)+ '\'';
 	}
 }

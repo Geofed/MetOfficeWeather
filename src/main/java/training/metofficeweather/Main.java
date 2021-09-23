@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -52,7 +53,7 @@ public class Main {
         root.locations.location.forEach(e -> {
 
             // shud print all related detail to location input
-            if (input.equals(e.name)) {
+            if (input.toUpperCase(Locale.ROOT).equals(e.name.toUpperCase(Locale.ROOT))) {
                 System.out.println(e);
             }
                 });

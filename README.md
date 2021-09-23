@@ -10,7 +10,7 @@ Independent copy of MetOffice Java Bootcamp exercise The main branch is a starti
 * Gather users location Choice
   * [X] Print prompt
   * [X] Readline
-  * [ ] Split readline
-  * [ ] query the data
+  * [X] query the data
 * Return data
-  * [ ] pretty print
+  * [X] pretty print
+  * [ ] print location-specific weather forecast
