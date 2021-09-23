@@ -6,7 +6,7 @@ Independent copy of MetOffice Java Bootcamp exercise The main branch is a starti
 * Print list of locatactions
   * [x] Get api data
   * [x] marshal into data structures
-  * [ ] pretty print
+  * [X] pretty print
 * Gather users location Choice
   * [ ] Print prompt
   * [ ] Readline

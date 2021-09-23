@@ -27,6 +27,15 @@ public class Main {
         Root root = mapper.readValue(responseStream, Root.class);
 
         // Finally we have the response
-        System.out.println(root);
+        PrintAllLocations(root);
+
+    }
+
+    public static void PrintAllLocations(Root root) {
+
+        root.locations.location.forEach(e -> {
+            System.out.println(e.name + ", ");
+        });
+
     }
 }	
