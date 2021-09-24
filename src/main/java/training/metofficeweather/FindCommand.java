@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 public class FindCommand implements Command{
 	@Override
 	public void Execute(String input, HashMap<String, Locations> locationsHashMap) {
-		boolean match = locationsHashMap.keySet().stream().anyMatch(e -> e.toUpperCase(Locale.ROOT).equals(input.toUpperCase(Locale.ROOT)));
+		boolean match = locationsHashMap.keySet().stream().anyMatch(e -> e.equals(input.toUpperCase(Locale.ROOT)));
 		if (match) {
 			System.out.println("Found a match");
 			locationsHashMap

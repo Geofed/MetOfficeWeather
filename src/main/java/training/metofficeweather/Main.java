@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -23,7 +24,7 @@ public class Main {
 
     private static HashMap<String, Locations> InitMap(LocationsRoot locationsRoot) {
         HashMap<String, Locations> locationsMap = new HashMap<>();
-        locationsRoot.locations.location.forEach(e -> locationsMap.put(e.name, e));
+        locationsRoot.locations.location.forEach(e -> locationsMap.put(e.name.toUpperCase(Locale.ROOT), e));
         return locationsMap;
     }
 
@@ -43,6 +44,7 @@ public class Main {
         FindCommand find = new FindCommand();
         ListCommand list = new ListCommand();
         HelpCommand help = new HelpCommand();
+        WeatherCommand weather = new WeatherCommand();
 
         while (true) {
             System.out.print(">>> ");
@@ -55,6 +57,7 @@ public class Main {
                     list.Execute(null, locationsHashMap);
                     break;
                 case "weather":
+                    weather.Execute(input[1], locationsHashMap);
                     break;
                 case "help":
                     help.Execute(null, null);
