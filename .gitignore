@@ -36,5 +36,7 @@ fabric.properties
 
 target/
 logs/
+Data/
 
 dependency-reduced-pom.xml
+

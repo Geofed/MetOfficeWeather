@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
@@ -16,8 +17,13 @@ import java.util.Scanner;
 public class Main {
     private static LocationsRoot locationsRoot;
     private static HashMap<String, Locations> locationsHashMap;
+    public static boolean localFlag = false;
     public static void main(String args[]) throws IOException {
-        locationsRoot = InitJson();
+        // In order to initialise from local test data instead of the met office api use the -l flag in program arguments
+        if (args[0].equals("-l")) {
+            localFlag = true;
+        }
+        locationsRoot = localFlag == true ? InitLocalJson() : InitJson();
         locationsHashMap = InitMap(locationsRoot);
 
         ReadEvaluatePrintLoop();
@@ -36,6 +42,17 @@ public class Main {
         InputStream responseStream = connection.getInputStream();
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(responseStream, LocationsRoot.class);
+    }
+
+    private static LocationsRoot InitLocalJson() throws IOException {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            LocationsRoot metData = mapper.readValue(Paths.get("Data/sitelist.json").toFile(), LocationsRoot.class);
+            return metData;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     public static void ReadEvaluatePrintLoop() {
