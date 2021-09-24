@@ -1,5 +1,8 @@
 package training.metofficeweather.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Locations {
 	public String elevation;
 	public String id;
