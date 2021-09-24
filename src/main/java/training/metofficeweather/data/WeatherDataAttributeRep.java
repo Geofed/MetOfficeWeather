@@ -26,4 +26,13 @@ public class WeatherDataAttributeRep {
 	public String solarUvIndex;
 	@JsonProperty("$")
 	public String minAfterMidnight;
+
+	@Override
+	public String toString() {
+		Integer min = Integer.parseInt(minAfterMidnight);
+		return  "\nTemperature: " + temp + "°C  ( feels like " + feelsLike + "°C )\n" +
+				"Humidity: " + humidity + "%\n" +
+				"Wind: " + windSpeed + " mph " + windDirection + " \n" +
+				"Time: " + min / 60 + ":00";
+	}
 }

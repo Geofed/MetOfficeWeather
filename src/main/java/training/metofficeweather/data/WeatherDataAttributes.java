@@ -8,4 +8,9 @@ public class WeatherDataAttributes {
 	public String units;
 	@JsonProperty("$")
 	public String description;
+
+	@Override
+	public String toString() {
+		return  units + "\n" + description;
+	}
 }

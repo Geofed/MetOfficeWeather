@@ -9,4 +9,9 @@ public class WeatherSiteRep {
 
 	@JsonProperty("DV")
 	public WeatherLocationAttriubutes locationAttributes;
+
+	@Override
+	public String toString() {
+		return  locationAttributes.toString();
+	}
 }
