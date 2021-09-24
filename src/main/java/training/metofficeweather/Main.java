@@ -18,12 +18,13 @@ public class Main {
         locationsRoot = InitJson();
         locationsHashMap = InitMap(locationsRoot);
 
-        Repl();
+        ReadEvaluatePrintLoop();
     }
 
     private static HashMap<String, Locations> InitMap(LocationsRoot locationsRoot) {
         HashMap<String, Locations> locationsMap = new HashMap<>();
         locationsRoot.locations.location.forEach(e -> locationsMap.put(e.name, e));
+        return locationsMap;
     }
 
     private static LocationsRoot InitJson() throws IOException {
@@ -35,7 +36,7 @@ public class Main {
         return mapper.readValue(responseStream, LocationsRoot.class);
     }
 
-    public static void Repl() {
+    public static void ReadEvaluatePrintLoop() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("View avaliable commands with 'help'");
 
