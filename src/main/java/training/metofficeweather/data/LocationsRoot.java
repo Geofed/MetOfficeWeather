@@ -2,7 +2,7 @@ package training.metofficeweather.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Root {
+public class LocationsRoot {
 	@JsonProperty("Locations")
 	public LocationsList locations;
 

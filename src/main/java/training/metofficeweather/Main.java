@@ -1,64 +1,64 @@
 package training.metofficeweather;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import training.metofficeweather.data.Root;
+import training.metofficeweather.data.Locations;
+import training.metofficeweather.data.LocationsRoot;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Locale;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
+    private static LocationsRoot locationsRoot;
+    private static HashMap<String, Locations> locationsHashMap;
     public static void main(String args[]) throws IOException {
-        // Create a neat value object to hold the URL
+        locationsRoot = InitJson();
+        locationsHashMap = InitMap(locationsRoot);
+
+        Repl();
+    }
+
+    private static HashMap<String, Locations> InitMap(LocationsRoot locationsRoot) {
+        HashMap<String, Locations> locationsMap = new HashMap<>();
+        locationsRoot.locations.location.forEach(e -> locationsMap.put(e.name, e));
+    }
+
+    private static LocationsRoot InitJson() throws IOException {
         URL url = new URL("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist?key=" + System.getenv("API_KEY"));
-
-        // Open a connection(?) on the URL(??) and cast the response(???)
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        // Now it's "open", we can set the request method, headers etc.
         connection.setRequestProperty("accept", "application/json");
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36");
-
-        // This line makes the request
         InputStream responseStream = connection.getInputStream();
-
         ObjectMapper mapper = new ObjectMapper();
-        Root root = mapper.readValue(responseStream, Root.class);
-
-        // Finally we have the response
-
-//        PrintAllLocations(root);   <-- works
-        UserInterface(root);     // asks for user input and print out desired location
-
+        return mapper.readValue(responseStream, LocationsRoot.class);
     }
 
-    public static void PrintAllLocations(Root root) {
-
-        root.locations.location.forEach(e -> {
-            System.out.println(e.name + ", ");
-        });
-
-    }
-
-    public static void UserInterface(Root root){
+    public static void Repl() {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("View avaliable commands with 'help'");
 
-        System.out.println("What location are you interested in?:");
-        String input = scanner.nextLine();
+        FindCommand find = new FindCommand();
+        ListCommand list = new ListCommand();
+        HelpCommand help = new HelpCommand();
 
-        // need to search for input location and print the required info
-        root.locations.location.forEach(e -> {
-
-            // shud print all related detail to location input
-            if (input.toUpperCase(Locale.ROOT).equals(e.name.toUpperCase(Locale.ROOT))) {
-                System.out.println(e);
+        while (true) {
+            System.out.print(">>> ");
+            String[] input = scanner.nextLine().split(" ", 2);
+            switch (input[0]) {
+                case "find":
+                    find.Execute(input[1], locationsHashMap);
+                    break;
+                case "list":
+                    list.Execute(null, locationsHashMap);
+                    break;
+                case "weather":
+                    break;
+                case "help":
+                    help.Execute(null, null);
+                    break;
             }
-                });
-
+        }
     }
-
-
-}	
+}
