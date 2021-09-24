@@ -43,11 +43,15 @@ public class Main {
         FindCommand find = new FindCommand();
         ListCommand list = new ListCommand();
         HelpCommand help = new HelpCommand();
+        SearchNameCommand searchname = new SearchNameCommand();
 
         while (true) {
             System.out.print(">>> ");
             String[] input = scanner.nextLine().split(" ", 2);
             switch (input[0]) {
+                case "searchname":
+                    searchname.Execute(input[1], locationsHashMap);
+                    break;
                 case "find":
                     find.Execute(input[1], locationsHashMap);
                     break;
