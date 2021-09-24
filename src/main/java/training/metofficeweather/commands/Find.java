@@ -1,11 +1,12 @@
-package training.metofficeweather;
+package training.metofficeweather.commands;
 
+import training.metofficeweather.Command;
 import training.metofficeweather.data.Locations;
 
 import java.util.HashMap;
 import java.util.stream.Stream;
 
-public class FindCommand implements Command{
+public class Find implements Command {
 	@Override
 	public void Execute(String input, HashMap<String, Locations> locationsHashMap) {
 		Stream<String> keyStream = locationsHashMap.keySet().stream();
