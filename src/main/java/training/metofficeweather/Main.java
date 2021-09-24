@@ -55,7 +55,7 @@ public class Main {
                 Class<?> commandClass = Class.forName("training.metofficeweather.commands." + input[0].substring(0, 1).toUpperCase() + input[0].substring(1).toLowerCase());
                 Object commandInstance = commandClass.newInstance();
                 Method m = commandClass.getDeclaredMethod("Execute", String.class, HashMap.class);
-                m.invoke(commandInstance, rawInput,  locationsHashMap);
+                m.invoke(commandInstance, input[1],  locationsHashMap);
 
             } catch (Exception e) {
 

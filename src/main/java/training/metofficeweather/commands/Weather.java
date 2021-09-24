@@ -29,7 +29,7 @@ public class Weather implements Command {
 			connection.setRequestProperty("accept", "application/json");
 			InputStream responseStream = connection.getInputStream();
 			ObjectMapper mapper = new ObjectMapper();
-			Object out = mapper.readValue(responseStream, Object.class);
+			Object out = mapper.readValue(responseStream, WeatherRoot.class);
 			System.out.println(out);
 		}
 		catch (Exception e) {
