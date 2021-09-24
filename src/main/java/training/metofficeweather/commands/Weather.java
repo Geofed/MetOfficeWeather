@@ -30,7 +30,7 @@ public class Weather implements Command {
 			InputStream responseStream = connection.getInputStream();
 			ObjectMapper mapper = new ObjectMapper();
 			Object out = mapper.readValue(responseStream, WeatherRoot.class);
-			System.out.println(out);
+			System.out.println(out.toString());
 		}
 		catch (Exception e) {
 			System.out.println("Unable to process web request");

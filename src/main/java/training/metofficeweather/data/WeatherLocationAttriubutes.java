@@ -10,4 +10,9 @@ public class WeatherLocationAttriubutes {
 	public String type;
 	@JsonProperty("Location")
 	public WeatherDataAttributeLocation weatherDataAttributeLocation;
+
+	@Override
+	public String toString() {
+		return weatherDataAttributeLocation.toString();
+	}
 }
