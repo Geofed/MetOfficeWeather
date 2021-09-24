@@ -13,7 +13,15 @@ filters for locations that starts with ...
 public class Filter implements Command {
     @Override
     public void Execute(String input, HashMap<String, Locations> locationsHashMap) {
-        locationsHashMap.keySet().stream().filter(e -> e.toUpperCase().startsWith(input.toUpperCase(Locale.ROOT))).
-                forEach(f -> System.out.println(f + ", ID:"+ locationsHashMap.get(f).id));
+        locationsHashMap
+                .keySet()
+                .stream()
+                .filter(e -> e.toUpperCase().startsWith(input.toUpperCase(Locale.ROOT)))
+                .forEach(f -> System.out.println(f + ", ID:"+ locationsHashMap.get(f).id));
+    }
+
+    @Override
+    public void Help() {
+        System.out.println("Search for a place by a few charaters of its name");
     }
 }

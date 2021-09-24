@@ -10,4 +10,9 @@ public class Exit implements Command {
 	public void Execute(String input, HashMap<String, Locations> locationsHashMap) {
 		System.exit(1);
 	}
+
+	@Override
+	public void Help() {
+		System.out.println("Exits the program");
+	}
 }

@@ -36,4 +36,9 @@ public class Weather implements Command {
 			System.out.println("Unable to process web request");
 		}
 	}
+
+	@Override
+	public void Help() {
+		System.out.println("Print the weather for a specific place");
+	}
 }

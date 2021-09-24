@@ -17,7 +17,12 @@ public class Find implements Command {
 					.keySet()
 					.stream()
 					.filter(e -> e.toUpperCase(Locale.ROOT).equals(input.toUpperCase(Locale.ROOT)))
-					.forEach(e -> System.out.println(locationsHashMap.get(e)));
+					.forEach(f -> System.out.println(locationsHashMap.get(f)));
 		}
+	}
+
+	@Override
+	public void Help() {
+		System.out.println("Print all of the attributes for a specific location");
 	}
 }

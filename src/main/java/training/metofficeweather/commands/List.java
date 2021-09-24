@@ -10,4 +10,9 @@ public class List implements Command {
 	public void Execute(String input, HashMap<String, Locations> locationsHashMap) {
 		locationsHashMap.keySet().forEach(e -> System.out.println(e + ",ID:" + locationsHashMap.get(e).id));
 	}
+
+	@Override
+	public void Help() {
+		System.out.println("List all avaliable locations");
+	}
 }
