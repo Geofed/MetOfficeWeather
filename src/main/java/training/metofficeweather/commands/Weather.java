@@ -1,6 +1,7 @@
-package training.metofficeweather;
+package training.metofficeweather.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import training.metofficeweather.Command;
 import training.metofficeweather.data.Locations;
 import training.metofficeweather.data.LocationsRoot;
 import training.metofficeweather.data.WeatherRoot;
@@ -11,7 +12,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class WeatherCommand implements Command {
+public class Weather implements Command {
 	@Override
 	public void Execute(String input, HashMap<String, Locations> locationsHashMap) {
 		String locationId = null;

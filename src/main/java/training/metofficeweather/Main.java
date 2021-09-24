@@ -6,6 +6,7 @@ import training.metofficeweather.data.LocationsRoot;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -39,29 +40,27 @@ public class Main {
 
     public static void ReadEvaluatePrintLoop() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("View avaliable commands with 'help'");
-
-        FindCommand find = new FindCommand();
-        ListCommand list = new ListCommand();
-        HelpCommand help = new HelpCommand();
-        WeatherCommand weather = new WeatherCommand();
-
+        System.out.println("View available commands with 'help'");
+        
         while (true) {
+
             System.out.print(">>> ");
-            String[] input = scanner.nextLine().split(" ", 2);
-            switch (input[0]) {
-                case "find":
-                    find.Execute(input[1], locationsHashMap);
-                    break;
-                case "list":
-                    list.Execute(null, locationsHashMap);
-                    break;
-                case "weather":
-                    weather.Execute(input[1], locationsHashMap);
-                    break;
-                case "help":
-                    help.Execute(null, null);
-                    break;
+            String rawInput = scanner.nextLine();
+            String[] input = rawInput.split(" ", 2);
+
+            if (input.length == 1) input = new String[]{input[0], ""};
+
+            try {
+
+                Class<?> commandClass = Class.forName("training.metofficeweather.commands." + input[0].substring(0, 1).toUpperCase() + input[0].substring(1).toLowerCase());
+                Object commandInstance = commandClass.newInstance();
+                Method m = commandClass.getDeclaredMethod("Execute", String.class, HashMap.class);
+                m.invoke(commandInstance, rawInput,  locationsHashMap);
+
+            } catch (Exception e) {
+
+                //e.printStackTrace();
+                System.out.println("Invalid command, type 'Help' to see available commands  :)");
             }
         }
     }
