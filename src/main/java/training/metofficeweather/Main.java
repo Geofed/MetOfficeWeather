@@ -20,9 +20,14 @@ public class Main {
     public static boolean localFlag = false;
     public static void main(String args[]) throws IOException {
         // In order to initialise from local test data instead of the met office api use the -l flag in program arguments
-        if (args[0].equals("-l")) {
-            localFlag = true;
+        try {
+            if (args[0].equals("-l")) {
+                localFlag = true;
+            }
+        } catch (Exception e) {
+            System.out.println("Getting your weather from the clouds ☁ ☁ ☁");
         }
+
         locationsRoot = localFlag == true ? InitLocalJson() : InitJson();
         locationsHashMap = InitMap(locationsRoot);
 
