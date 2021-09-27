@@ -30,9 +30,52 @@ public class WeatherDataAttributeRep {
 	@Override
 	public String toString() {
 		Integer min = Integer.parseInt(minAfterMidnight);
-		return  "\nTemperature: " + temp + "°C  ( feels like " + feelsLike + "°C )\n" +
-				"Humidity: " + humidity + "%\n" +
-				"Wind: " + windSpeed + " mph " + windDirection + " \n" +
-				"Time: " + min / 60 + ":00";
+		return  ":  Temperature: " + temp + "°C  ( feels like " + feelsLike + "°C )  " +
+				"Humidity: " + humidity + "%  " +
+				"Wind: " + windSpeed + " mph " + windDirection;
+	}
+
+	public String getWindDirection() {
+		return windDirection;
+	}
+
+	public String getFeelsLike() {
+		return feelsLike;
+	}
+
+	public String getGustSpeed() {
+		return gustSpeed;
+	}
+
+	public String getHumidity() {
+		return humidity;
+	}
+
+	public String getPrecipitationPercent() {
+		return precipitationPercent;
+	}
+
+	public String getWindSpeed() {
+		return windSpeed;
+	}
+
+	public String getTemp() {
+		return temp;
+	}
+
+	public String getVisibility() {
+		return visibility;
+	}
+
+	public String getWeatherCode() {
+		return weatherCode;
+	}
+
+	public String getSolarUvIndex() {
+		return solarUvIndex;
+	}
+
+	public String getMinAfterMidnight() {
+		return minAfterMidnight;
 	}
 }
