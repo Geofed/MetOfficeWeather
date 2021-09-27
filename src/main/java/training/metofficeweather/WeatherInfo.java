@@ -11,9 +11,11 @@ import java.net.URL;
 public class WeatherInfo {
     private final String locationId;
     private WeatherSiteRep info;
+    private String apiKey;
 
-    public WeatherInfo(String locationId) {
+    public WeatherInfo(String locationId, String apiKey) {
         this.locationId = locationId;
+        this.apiKey = apiKey;
         this.info = populateInfo(locationId);
     }
 
@@ -43,5 +45,13 @@ public class WeatherInfo {
 
     public void setInfo(WeatherSiteRep info) {
         this.info = info;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }
