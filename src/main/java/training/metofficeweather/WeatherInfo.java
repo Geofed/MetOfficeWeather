@@ -18,9 +18,9 @@ public class WeatherInfo {
     private WeatherSiteRep info;
     private HashMap<Date, WeatherDataAttributeRep> weatherReps = new HashMap<Date, WeatherDataAttributeRep>();
 
-
-    public WeatherInfo(String locationId) {
+    public WeatherInfo(String locationId, String apiKey) {
         this.locationId = locationId;
+        this.apiKey = apiKey;
         this.info = populateInfo(locationId);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
@@ -79,6 +79,5 @@ public class WeatherInfo {
         Collections.sort(keys);
         return keys;
     }
-
 
 }

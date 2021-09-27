@@ -7,11 +7,46 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
           crossorigin=""/>
+    <link href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.3/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.3/datatables.min.js"></script>
+    <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             crossorigin=""></script>
     <style>
-        #mapid { height: 180px; }
+        #mapid { height: 650px; }
+        .parent {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: 1fr;
+            grid-column-gap: 0px;
+            grid-row-gap: 0px;
+        }
+
+        .jumbo {
+            grid-area: 1 / 1 / 2 / 2;
+            margin-right: 24px;
+            margin-left: 24px;
+        }
+        .map {
+            grid-area: 1 / 2 / 2 / 3;
+            margin: 24px;
+        }
+
+        .tableParent {
+            display: grid;
+            grid-template-columns: 1.5fr 0.5fr;
+            grid-template-rows: 1fr;
+            grid-column-gap: 0px;
+            grid-row-gap: 0px;
+        }
+
+        .tablebox {
+            grid-area: 1 / 1 / 2 / 2;
+            margin-right: 24px;
+        }
+        .search { grid-area: 1 / 2 / 2 / 3; }
     </style>
     <title>Home page</title>
 </head>
@@ -24,35 +59,138 @@
     </form>
 </nav>
 <div layout:fragment="content" class="container body-content">
-    <div class="p-5 mb-4 mt-4 bg-light rounded-3">
-        <h1>Met Office Weather</h1>
-        <p class="lead">For all your weather needs. Enter a location id below and click enter to see the weather forecast for that location.</p>
+    <div class="parent">
+        <div class="p-5 mb-4 mt-4 bg-light rounded-3 jumbo">
+            <h1>Met Office Weather</h1>
+            <p class="lead">For all your weather needs. Enter a location ID in the search bar to find a location's weather forcast</p>
+        </div>
+        <div id="mapid" class="map"></div>
     </div>
-    <div id="mapid"></div>
-    <div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Region</th>
-                <th scope="col">Longitude</th>
-                <th scope="col">Latitude</th>
-                <th scope="col">Elevation</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="location: ${locations}">
-                <th scope="row" th:text="${location.id}"></th>
-                <td th:text="${location.name}"></td>
-                <td th:text="${location.region}"></td>
-                <td th:text="${location.longitude}"></td>
-                <td th:text="${location.latitude}"></td>
-                <td th:text="${location.elevation}"></td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="tableParent">
+        <div class="pt-4 tablebox">
+            <table class="table" id="locationTable">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Region</th>
+                    <th scope="col">Longitude</th>
+                    <th scope="col">Latitude</th>
+                    <th scope="col">Elevation</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="location: ${locations}">
+                    <th scope="row" th:text="${location.id}"></th>
+                    <td th:text="${location.name}"></td>
+                    <td th:text="${location.region}"></td>
+                    <td th:text="${location.longitude}"></td>
+                    <td th:text="${location.latitude}"></td>
+                    <td th:text="${location.elevation}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
+                    </li>
+                    <th:block th:each="i: ${#numbers.sequence(bottomLimit, topLimit)}">
+                        <li th:if="${i == page}" class="page-item active"><a class="page-link" th:href="@{/(page=${i})}" th:text="${i+1}"></a></li>
+                        <li th:unless="${i == page}" class="page-item"><a class="page-link" th:href="@{/(page=${i})}" th:text="${i+1}"></a></li>
+                    </th:block>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="search pt-4" style="margin-top: 8px">
+            <p class="mb-2" style="text-align: right;"><strong>Filter locations</strong></p>
+            <hr style="margin-top: 9px"/>
+           <form th:action="@{/}" method="get">
+               <div class="mb-3">
+                   <label for="placeName" class="form-label">Place name</label>
+                   <input type="text" class="form-control" name="placeName" id="placeName" aria-describedby="emailHelp">
+               </div>
+               <div class="mb-3">
+                   <label class="form-label" for="regionSelector">Region</label>
+                   <select class="form-select" id="regionSelector" name="regionSelector">
+                       <option value="any">Any</option>
+                       <option value="em">EM</option>
+                       <option value="ta">TA</option>
+                       <option value="nw">NW</option>
+                       <option value="ee">EE</option>
+                       <option value="sw">SW</option>
+                       <option value="he">HE</option>
+                       <option value="ne">NE</option>
+                       <option value="st">ST</option>
+                       <option value="ne">NE</option>
+                       <option value="wm">WM</option>
+                       <option value="sw">SW</option>
+                       <option value="dg">DG</option>
+                       <option value="sw">SW</option>
+                       <option value="se">SE</option>
+                       <option value="wl">WL</option>
+                       <option value="he">HE</option>
+                       <option value="ee">EE</option>
+                       <option value="ta">TA</option>
+                       <option value="se">SE</option>
+                       <option value="dg">DG</option>
+                       <option value="ta">TA</option>
+                       <option value="se">SE</option>
+                       <option value="yh">YH</option>
+                       <option value="wm">WM</option>
+                       <option value="dg">DG</option>
+                       <option value="he">HE</option>
+                       <option value="se">SE</option>
+                       <option value="em">EM</option>
+                       <option value="wm">WM</option>
+                       <option value="em">EM</option>
+                       <option value="dg">DG</option>
+                       <option value="em">EM</option>
+                       <option value="yh">YH</option>
+                       <option value="ta">TA</option>
+                       <option value="wm">WM</option>
+                       <option value="sw">SW</option>
+                       <option value="nw">NW</option>
+                       <option value="ee">EE</option>
+                       <option value="wl">WL</option>
+                       <option value="nw">NW</option>
+                       <option value="wl">WL</option>
+                       <option value="sw">SW</option>
+                   </select>
+               </div>
+               <div class="mb-3">
+                   <!-- range found with `jq '[.Locations.Location[].elevation | select(. != null) | tonumber ]' sitelist.json | tr -d "[]," | sort -n | uniq | less` -->
+               <label for="seaLevel" class="form-label">Height above sea level: </label>
+               <input type="range" class="form-range" min="-2" max="1344" step="1" name="seaLevel" id="seaLevel" oninput="this.nextElementSibling.value = this.value">
+                   <output>-2</output>
+               </div>
+               <div class="d-grid gap-2">
+                   <button class="btn btn-primary" type="submit">Submit</button>
+               </div>
+           </form>
+        </div>
     </div>
 </div>
+<script th:inline="javascript">
+    document.getElementsByTagName("input")[2].value = -2;
+    // geo:54.815,-2.925?z=6
+    let mymap = L.map('mapid').setView([54.730, -2.925], 6);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: /*[[${apiKey}]]*/ 'apikey'
+    }).addTo(mymap);
+
+    let locations = /*[[${locations}]]*/ ["a", "b"]
+    for (let i = 0; i < 50; i++) {
+        L.marker([locations[i].latitude, locations[i].longitude]).addTo(mymap);
+    }
+</script>
 </body>
 </html>
