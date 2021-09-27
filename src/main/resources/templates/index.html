@@ -3,24 +3,55 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout">
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <style>
+        #mapid { height: 180px; }
+    </style>
     <title>Home page</title>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid"><a class="navbar-brand">MetWeather</a></div>
+    <form class="d-flex me-2" id="messageForm" th:action="@{/weatherInfo}" method="get">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="locationId">
+        <button class="btn btn-success" type="submit">Search</button>
+    </form>
+</nav>
 <div layout:fragment="content" class="container body-content">
-    <div class="jumbotron">
+    <div class="p-5 mb-4 mt-4 bg-light rounded-3">
         <h1>Met Office Weather</h1>
         <p class="lead">For all your weather needs. Enter a location id below and click enter to see the weather forecast for that location.</p>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <form id="messageForm" th:action="@{/weatherInfo}" method="get">
-                <fieldset>
-                    <legend>Location ID: </legend>
-                    <input type="text" name="locationId">
-                    <input type="submit" value="Get Weather Info" />
-                </fieldset>
-            </form>
-        </div>
+    <div id="mapid"></div>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Region</th>
+                <th scope="col">Longitude</th>
+                <th scope="col">Latitude</th>
+                <th scope="col">Elevation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="location: ${locations}">
+                <th scope="row" th:text="${location.id}"></th>
+                <td th:text="${location.name}"></td>
+                <td th:text="${location.region}"></td>
+                <td th:text="${location.longitude}"></td>
+                <td th:text="${location.latitude}"></td>
+                <td th:text="${location.elevation}"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 </body>
