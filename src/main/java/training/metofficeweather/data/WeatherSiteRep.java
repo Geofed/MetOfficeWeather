@@ -8,7 +8,7 @@ public class WeatherSiteRep {
 	public WeatherDataAttributes dataAttributes;
 
 	@JsonProperty("DV")
-	public WeatherLocationAttriubutes locationAttributes;
+	public WeatherLocationAttributes locationAttributes;
 
 	@Override
 	public String toString() {
