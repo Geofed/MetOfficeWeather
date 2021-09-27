@@ -17,6 +17,31 @@
             </div>
             <div>
                 <span th:text="${weatherInfo.getInfo().toString()}"></span>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Temperature</th>
+                        <th scope="col">Feels like</th>
+                        <th scope="col">Humidity</th>
+                        <th scope="col">Wind Speed</th>
+                        <th scope="col">Wind Direction</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="key : ${weatherInfo.getSortedKeys()}">
+                        <td scope="row" th:text="${key}"></td>
+                        <td th:text="${weatherInfo.getWeatherReps().get(key).temp}"></td>
+                        <td th:text="${weatherInfo.getWeatherReps().get(key).feelsLike}"></td>
+                        <td th:text="${weatherInfo.getWeatherReps().get(key).humidity}"></td>
+                        <td th:text="${weatherInfo.getWeatherReps().get(key).windSpeed}"></td>
+                        <td th:text="${weatherInfo.getWeatherReps().get(key).windDirection}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+
             </div>
         </div>
     </body>
