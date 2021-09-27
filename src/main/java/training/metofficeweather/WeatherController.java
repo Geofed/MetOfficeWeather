@@ -49,7 +49,7 @@ public class WeatherController {
         model.addAttribute("topLimit", topLimit);
         model.addAttribute("apiKey", System.getenv("MAP_API_KEY"));
         if (locations.size() > 50) {
-            model.addAttribute(locations.subList(page*50, (page+1)*50));
+            model.addAttribute("locations", locations.subList(page*50, (page+1)*50));
         } else {
             model.addAttribute("locations", locations);
         }

@@ -20,7 +20,7 @@ public class WeatherInfo {
 
     public WeatherInfo(String locationId, String apiKey) {
         this.locationId = locationId;
-        this.apiKey = apiKey;
+        //this.apiKey = apiKey;
         this.info = populateInfo(locationId);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
