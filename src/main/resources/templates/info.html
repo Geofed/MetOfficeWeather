@@ -72,6 +72,7 @@ Also graphs?
             <h2>Weather Information</h2>
             <div>
                 <p>You entered location id <span th:text="${weatherInfo.locationId}"></span></p>
+                <p>You entered location name <span th:text="${weatherInfo.getLocationName()}"></span></p>
             </div>
             <div>
                 <span th:text="${weatherInfo.getInfo().toString()}"></span>
