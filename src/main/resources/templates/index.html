@@ -189,7 +189,11 @@
 
     let locations = /*[[${locations}]]*/ ["a", "b"]
     for (let i = 0; i < 50; i++) {
-        L.marker([locations[i].latitude, locations[i].longitude]).addTo(mymap);
+        let marker = L.marker([locations[i].latitude, locations[i].longitude]).addTo(mymap);
+        marker.on("click", e => {
+            const XHR = new XMLHttpRequest();
+            XHR.open("GET", "/weatherInfo?locationId="+locations[i].id)
+        })
     }
 </script>
 </body>
