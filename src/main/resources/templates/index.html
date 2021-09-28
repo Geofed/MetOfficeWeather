@@ -191,8 +191,8 @@
     for (let i = 0; i < 50; i++) {
         let marker = L.marker([locations[i].latitude, locations[i].longitude]).addTo(mymap);
         marker.on("click", e => {
-            const XHR = new XMLHttpRequest();
-            XHR.open("GET", "/weatherInfo?locationId="+locations[i].id)
+            console.log("Clicked marker")
+            console.log(e)
         })
     }
 </script>

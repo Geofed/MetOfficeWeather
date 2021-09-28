@@ -1,6 +1,5 @@
 package training.metofficeweather;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,12 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import training.metofficeweather.data.Locations;
-import training.metofficeweather.data.LocationsRoot;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -36,15 +31,31 @@ public class WeatherController {
             e.printStackTrace();
         }
         if (placeName.isPresent()) {
-            locations = locations.stream().filter(e -> (e.name.toUpperCase(Locale.ROOT).startsWith(placeName.get().toUpperCase(Locale.ROOT)))).collect(Collectors.toList());
+            locations = locations.stream()
+                    .filter(e -> (e.name != null))
+                    .filter(e -> (
+                            e.name.toUpperCase(Locale.ROOT)
+                                    .startsWith(
+                                            placeName.get().toUpperCase(Locale.ROOT))))
+                    .collect(Collectors.toList());
         }
         if (region.isPresent()) {
             if (!region.get().equals("any")) {
-                locations = locations.stream().filter(e -> (e.region.equals(region.get()))).collect(Collectors.toList());
+                locations = locations.stream()
+                        .filter(e -> (e.region != null))
+                        .filter(e -> (
+                                e.region.equals(region.get())))
+                        .collect(Collectors.toList());
             }
         }
         if (seaLevel.isPresent()) {
-            locations = locations.stream().filter(e -> (Integer.parseInt(e.elevation.replace(".0", "")) > seaLevel.get())).collect(Collectors.toList());
+                locations = locations.stream()
+                        .filter(e -> (e.elevation != null))
+                        .filter(e -> (
+                                Integer.parseInt(
+                                        e.elevation.replace(".0", "")
+                                ) > seaLevel.get()))
+                        .collect(Collectors.toList());
         }
         model.addAttribute("page", page);
         int bottomLimit = Math.max((page - 5), 0);
