@@ -1,15 +1,21 @@
 package training.metofficeweather;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import training.metofficeweather.commands.Weather;
 import training.metofficeweather.data.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static training.metofficeweather.Main.InitJson;
+import static training.metofficeweather.Main.InitLocalJson;
+import static training.metofficeweather.WeatherApplication.localFlag;
 
 public class WeatherInfo {
     private String locationId;
@@ -26,7 +32,12 @@ public class WeatherInfo {
         this.locationId = checkInput(initLocationId);
 
         //this.apiKey = apiKey;
-        this.info = populateInfo(this.locationId);
+        //this.info = populateInfo(this.locationId);
+        try {
+            this.info = localFlag ? populateLocalInfo(this.locationId) : populateInfo(this.locationId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH");
 
@@ -101,6 +112,17 @@ public class WeatherInfo {
         }
         catch (Exception e){
            e.printStackTrace();
+        }
+        return new WeatherSiteRep();
+    }
+
+    private WeatherSiteRep populateLocalInfo(String locationId) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            WeatherRoot out = mapper.readValue(Paths.get("Data/" + locationId + ".json").toFile(), WeatherRoot.class);
+            return out.weatherSiteRep;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return new WeatherSiteRep();
     }
