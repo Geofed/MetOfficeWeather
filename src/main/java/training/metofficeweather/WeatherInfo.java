@@ -23,12 +23,12 @@ public class WeatherInfo {
         //this.apiKey = apiKey;
         this.info = populateInfo(locationId);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH");
 
         for (WeatherDataAtrributePeriod p : info.locationAttributes.weatherDataAttributeLocation.period) {
             for (WeatherDataAttributeRep r : p.rep) {
                 try {
-                    weatherReps.put(format.parse(p.value.substring(0, 10) + "-" + (Integer.parseInt(r.minAfterMidnight) / 60) + ":00"), r);
+                    weatherReps.put(format.parse(p.value.substring(0, 10) + "-" + (Integer.parseInt(r.minAfterMidnight) / 60)), r);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
