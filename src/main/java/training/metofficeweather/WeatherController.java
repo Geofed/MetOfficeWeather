@@ -7,17 +7,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+<<<<<<< Updated upstream
 import training.metofficeweather.data.Locations;
+=======
+import org.springframework.ui.Model;
+>>>>>>> Stashed changes
 import training.metofficeweather.data.LocationsRoot;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+<<<<<<< Updated upstream
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
+=======
+
+import static training.metofficeweather.Main.InitLocalJson;
+import static training.metofficeweather.WeatherApplication.localFlag;
+>>>>>>> Stashed changes
 
 @Controller
 public class WeatherController {
@@ -31,6 +41,7 @@ public class WeatherController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+<<<<<<< Updated upstream
         if (placeName.isPresent()) {
             locations = locations.stream().filter(e -> (e.name.toUpperCase(Locale.ROOT).startsWith(placeName.get().toUpperCase(Locale.ROOT)))).collect(Collectors.toList());
         }
@@ -52,6 +63,21 @@ public class WeatherController {
             model.addAttribute("locations", locations.subList(page*50, (page+1)*50));
         } else {
             model.addAttribute("locations", locations);
+=======
+
+        SiteInfo siteInfo = new SiteInfo(locations);
+
+        return ModelAndView("index", "siteInfo", siteInfo);
+    }
+     */
+
+    @GetMapping
+    String getLocations(Model model) {
+        try {
+            model.addAttribute("locations", localFlag ? InitLocalJson().locations.location : InitJson().locations.location);
+        } catch (IOException e) {
+            e.printStackTrace();
+>>>>>>> Stashed changes
         }
         return "index";
     }

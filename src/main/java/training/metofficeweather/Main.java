@@ -18,6 +18,7 @@ public class Main {
     private static LocationsRoot locationsRoot;
     private static HashMap<String, Locations> locationsHashMap;
     public static boolean localFlag = false;
+
     public static void main(String args[]) throws IOException {
         // In order to initialise from local test data instead of the met office api use the -l flag in program arguments
         try {
@@ -28,7 +29,7 @@ public class Main {
             System.out.println("Getting your weather from the clouds ☁ ☁ ☁");
         }
 
-        locationsRoot = localFlag == true ? InitLocalJson() : InitJson();
+        locationsRoot = localFlag ? InitLocalJson() : InitJson();
         locationsHashMap = InitMap(locationsRoot);
 
         ReadEvaluatePrintLoop();
@@ -49,7 +50,7 @@ public class Main {
         return mapper.readValue(responseStream, LocationsRoot.class);
     }
 
-    private static LocationsRoot InitLocalJson() throws IOException {
+    static LocationsRoot InitLocalJson() throws IOException {
         try {
             ObjectMapper mapper = new ObjectMapper();
             LocationsRoot metData = mapper.readValue(Paths.get("Data/sitelist.json").toFile(), LocationsRoot.class);
