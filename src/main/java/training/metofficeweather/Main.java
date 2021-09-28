@@ -41,7 +41,7 @@ public class Main {
         return locationsMap;
     }
 
-    private static LocationsRoot InitJson() throws IOException {
+    public static LocationsRoot InitJson() throws IOException {
         URL url = new URL("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist?key=" + System.getenv("API_KEY"));
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("accept", "application/json");
