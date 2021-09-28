@@ -20,16 +20,22 @@ import static training.metofficeweather.WeatherApplication.localFlag;
 public class WeatherInfo {
     private String locationId;
     private WeatherSiteRep info;
+    private String locationName;
     private HashMap<String, Locations> nameAndLocations = new HashMap<>();
     private HashMap<Date, WeatherDataAttributeRep> weatherReps = new HashMap<Date, WeatherDataAttributeRep>();
 
     public WeatherInfo(String initLocationId, String apiKey) {
+        initLocationId = initLocationId.trim();
 
         // call function to fill the nameandlocation map
         initMap();
 
         // check input, final value of locationId is expected to be numbers in string form
         this.locationId = checkInput(initLocationId);
+
+        this.locationName = getLocationName();
+        System.out.println(this.locationName);
+
 
         //this.apiKey = apiKey;
         //this.info = populateInfo(this.locationId);
@@ -54,7 +60,6 @@ public class WeatherInfo {
         weatherReps.keySet().stream().sorted().forEach( d -> {
             System.out.println(d.toString() + " " + weatherReps.get(d).toString());
         });
-
  */
 /*
         for (String name: nameAndLocations.keySet()) {
@@ -128,10 +133,9 @@ public class WeatherInfo {
     }
 
     public String getLocationName() {
-        for (String n: nameAndLocations.keySet()) {
-            if (nameAndLocations.get(n).id.equals(this.locationId)) {
-                return n;
-            }
+
+        if(!weatherReps.isEmpty()) {
+            return this.info.locationAttributes.weatherDataAttributeLocation.name;
         }
 
         return "";
@@ -158,7 +162,4 @@ public class WeatherInfo {
         Collections.sort(keys);
         return keys;
     }
-
-
-
 }
