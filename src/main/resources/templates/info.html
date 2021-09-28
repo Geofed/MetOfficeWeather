@@ -32,7 +32,7 @@ Also graphs?
                 <div class="card-group" id="card-group">
             </div>
             <div>
-                <div class="more-info bg-light rounded-3 collapse" id="moredetails">
+                <div class="more-info bg-light rounded-3" id="moredetails">
                     Stuff that needs to be hidden
                     </div>
             </div>
@@ -89,25 +89,37 @@ Also graphs?
            <p class="card-text">Windspeed: ${data.S}</p>
        </div>
            <div class="card-footer">
-               <button class="btn btn-primary" data-bs-toggle="collapse" type="button" data-bs-target="#${day}moredetail" aria-expanded="false" aria-controls="moredetail">Toggle more details</button>
-                <div class="col">
-                <div class="collapse multi-collapse" id="${day}moredetail">
-                  <div class="card card-body">
-                    Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                  </div>
-                </div>
-              </div>
-               <small class="text-muted">Last updated 3 mins ago</small>
+               <button class="btn btn-primary" data-bs-toggle="collapse" type="button" data-bs-target="#${day}moredetail" aria-expanded="false" aria-controls="${day}moredetail">Toggle more details</button>
            </div>
        </div>
        `
           }
 
+      function templateMoreInfo(day, data) {
+          return `
+          <div class="card" id="${day}-card">
+              <div class="card-body">
+                  <h5 class="card-title">${day}</h5>
+                  <p class="card-text">Temp: ${data.T}</p>
+                  <p class="card-text">Feels Like: ${data.F}</p>
+                  <p class="card-text">Humidity: ${data.H}</p>
+                  <p class="card-text">Windspeed: ${data.S}</p>
+              </div>
+          </div>
+          `
+      }
+
        let cardgroup = document.getElementById("card-group")
+       let moredetail = document.getElementById("moredetails")
        Object.keys(week).forEach(e => {
            if (week[e][0] !== undefined) {
                console.log(week[e][0])
                cardgroup.insertAdjacentHTML("beforeend", templateCard(e, week[e][0]))
+               moredetail.insertAdjacentHTML("beforeend", `<div id="${e}moredetail" class="collapse"`)
+               let daymoredetail = document.getElementById(`${e}moredetail`)
+               week[e].slice(1, week[e].length).forEach(f => {
+                   daymoredetail.insertAdjacentHTML("beforeend", templateMoreInfo(e, f))
+               })
            }
        });
     </script>
