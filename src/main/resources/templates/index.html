@@ -195,6 +195,20 @@
             console.log(e)
         })
     }
+
+    function onMapClick(e) {
+        alert("You clicked the map at " + e.latlng);
+        var formData = new FormData();
+
+        // Change this to be actual form datat
+        formData.append("username", "Groucho");
+        formData.append("accountnum", 123456);
+        var request = new XMLHttpRequest();
+        request.open("GET", "http://foo.com/submitform.php"); // This MUST be a get
+        request.send(formData);
+    }
+
+    mymap.on('click', onMapClick);
 </script>
 </body>
 </html>
