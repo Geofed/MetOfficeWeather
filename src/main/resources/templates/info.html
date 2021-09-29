@@ -5,51 +5,6 @@
 
     <!--@thymesVar id="weatherInfo" type="training.metofficeweather.web.WeatherInfo"-->
 <!---
-88b           d88        db        88      a8P  88888888888
-888b         d888       d88b       88    ,88'   88
-88`8b       d8'88      d8'`8b      88  ,88"     88
-88 `8b     d8' 88     d8'  `8b     88,d88'      88aaaaa
-88  `8b   d8'  88    d8YaaaaY8b    8888"88,     88"""""
-88   `8b d8'   88   d8""""""""8b   88P   Y8b    88
-88    `888'    88  d8'        `8b  88     "88,  88
-88     `8'     88 d8'          `8b 88       Y8b 88888888888
-
-888888888888   db        88888888ba  88          88888888888
-     88       d88b       88      "8b 88          88
-     88      d8'`8b      88      ,8P 88          88
-     88     d8'  `8b     88aaaaaa8P' 88          88aaaaa
-     88    d8YaaaaY8b    88""""""8b, 88          88"""""
-     88   d8""""""""8b   88      `8b 88          88
-     88  d8'        `8b  88      a8P 88          88
-     88 d8'          `8b 88888888P"  88888888888 88888888888
-
-88 888b      88 888888888888 ,ad8888ba,
-88 8888b     88      88     d8"'    `"8b
-88 88 `8b    88      88    d8'        `8b
-88 88  `8b   88      88    88          88
-88 88   `8b  88      88    88          88
-88 88    `8b 88      88    Y8,        ,8P
-88 88     `8888      88     Y8a.    .a8P
-88 88      `888      88      `"Y8888Y"'
-
-  ,ad8888ba,        db        88888888ba  88888888ba,    ad88888ba
- d8"'    `"8b      d88b       88      "8b 88      `"8b  d8"     "8b
-d8'               d8'`8b      88      ,8P 88        `8b Y8,
-88               d8'  `8b     88aaaaaa8P' 88         88 `Y8aaaaa,
-88              d8YaaaaY8b    88""""88'   88         88   `"""""8b,
-Y8,            d8""""""""8b   88    `8b   88         8P         `8b
- Y8a.    .a8P d8'        `8b  88     `8b  88      .a8P  Y8a     a8P
-  `"Y8888Y"' d8'          `8b 88      `8b 88888888Y"'    "Y88888P"
-
-   ad88888ba   ad88888ba   ad88888ba   ad88888ba
-d8"     "8b d8"     "8b d8"     "8b d8"     "8b
-""      a8P ""      a8P ""      a8P ""      a8P
-     ,a8P"       ,a8P"       ,a8P"       ,a8P"
-    d8"         d8"         d8"         d8"
-    ""          ""          ""          ""
-    aa          aa          aa          aa
-    88          88          88          88
-
 https://getbootstrap.com/docs/5.1/components/card/
 Cards with icons might looks cooler and be more readable
 Also graphs?
@@ -59,6 +14,7 @@ Also graphs?
     <head>
         <title>Weather Information</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </head>
     <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -74,34 +30,87 @@ Also graphs?
                 <p>You entered location id <span th:text="${weatherInfo.locationId}"></span></p>
                 <p>You entered location name <span th:text="${weatherInfo.getLocationName()}"></span></p>
             </div>
+                <div class="card-group" id="card-group">
+            </div>
             <div>
-                <span th:text="${weatherInfo.getInfo().toString()}"></span>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Temperature</th>
-                        <th scope="col">Feels like</th>
-                        <th scope="col">Humidity</th>
-                        <th scope="col">Wind Speed</th>
-                        <th scope="col">Wind Direction</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="key : ${weatherInfo.getSortedKeys()}">
-                        <td scope="row" th:text="${key}"></td>
-                        <td th:text="${weatherInfo.getWeatherReps().get(key).temp}"></td>
-                        <td th:text="${weatherInfo.getWeatherReps().get(key).feelsLike}"></td>
-                        <td th:text="${weatherInfo.getWeatherReps().get(key).humidity}"></td>
-                        <td th:text="${weatherInfo.getWeatherReps().get(key).windSpeed}"></td>
-                        <td th:text="${weatherInfo.getWeatherReps().get(key).windDirection}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-
-
-
+                <div class="more-info bg-light rounded-3 collapse" id="moredetails">
+                    Stuff that needs to be hidden
+                    </div>
             </div>
         </div>
+        </div>
+    <script th:inline="javascript">
+       let weatherReps = /*[[${weatherInfo}]]*/ ["a", "b"];
+       let monday = []
+       let tuesday = []
+       let wednesday = []
+       let thursday = []
+       let friday = []
+       let saturday = []
+       let sunday = []
+       let dates = Object.keys(weatherReps.weatherReps)
+       dates.forEach(e => {
+           dateobj = new Date(e)
+           console.log(dateobj)
+           switch (dateobj.getDay()) {
+               case 0:
+                   sunday.push(weatherReps.weatherReps[e]);
+                   break;
+               case 1:
+                   monday.push(weatherReps.weatherReps[e]);
+                   break;
+               case 2:
+                   tuesday.push(weatherReps.weatherReps[e]);
+                   break;
+               case 3:
+                   wednesday.push(weatherReps.weatherReps[e]);
+                   break;
+               case 4:
+                   thursday.push(weatherReps.weatherReps[e]);
+                   break;
+               case 5:
+                   friday.push(weatherReps.weatherReps[e]);
+                   break;
+               case 6:
+                   saturday.push(weatherReps.weatherReps[e]);
+                   break;
+           }
+       });
+
+       let week = { "Monday": monday, "Tuesday": tuesday, "Wednesday": wednesday, "Thursday": thursday, "Friday": friday, "Saturday": saturday, "Sunday": sunday };
+
+          function templateCard(day, data) {
+              return `
+          <div class="card" id="${day}-card">
+               <div class="card-body">
+               <h5 class="card-title">${day}</h5>
+           <p class="card-text">Temp: ${data.T}</p>
+           <p class="card-text">Feels Like: ${data.F}</p>
+           <p class="card-text">Humidity: ${data.H}</p>
+           <p class="card-text">Windspeed: ${data.S}</p>
+       </div>
+           <div class="card-footer">
+               <button class="btn btn-primary" data-bs-toggle="collapse" type="button" data-bs-target="#${day}moredetail" aria-expanded="false" aria-controls="moredetail">Toggle more details</button>
+                <div class="col">
+                <div class="collapse multi-collapse" id="${day}moredetail">
+                  <div class="card card-body">
+                    Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                  </div>
+                </div>
+              </div>
+               <small class="text-muted">Last updated 3 mins ago</small>
+           </div>
+       </div>
+       `
+          }
+
+       let cardgroup = document.getElementById("card-group")
+       Object.keys(week).forEach(e => {
+           if (week[e][0] !== undefined) {
+               console.log(week[e][0])
+               cardgroup.insertAdjacentHTML("beforeend", templateCard(e, week[e][0]))
+           }
+       });
+    </script>
     </body>
 </html>

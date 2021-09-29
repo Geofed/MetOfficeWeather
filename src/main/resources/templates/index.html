@@ -195,6 +195,12 @@
             console.log(e)
         })
     }
+
+    mymap.on('click', function(e) {
+
+        window.location.href = "/?longitude=" + e.latlng.lng + "&latitude=" + e.latlng.lat;
+
+    });
 </script>
 </body>
 </html>
