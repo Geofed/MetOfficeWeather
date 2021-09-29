@@ -20,6 +20,17 @@ import static training.metofficeweather.WeatherApplication.localFlag;
 public class WeatherInfo {
     private String locationId;
     private WeatherSiteRep info;
+    private HashMap<Date, WeatherDataAttributeRep> weatherReps = new HashMap<>();
+    private ArrayList<Day> monday;
+    private ArrayList<Day> tuesday;
+    private ArrayList<Day> wednesday;
+    private ArrayList<Day> thursday;
+    private ArrayList<Day> friday;
+    private ArrayList<Day> saturday;
+    private ArrayList<Day> sunday;
+    private ArrayList<ArrayList<Day>> days;
+    private String lat;
+    private String lon;
     private String locationName;
     private HashMap<String, Locations> nameAndLocations = new HashMap<>();
     private HashMap<Date, WeatherDataAttributeRep> weatherReps = new HashMap<Date, WeatherDataAttributeRep>();
@@ -47,6 +58,25 @@ public class WeatherInfo {
 
 
         //this.apiKey = apiKey;
+        this.info = populateInfo(locationId);
+        this.lat = info.locationAttributes.weatherDataAttributeLocation.lat;
+        this.lon = info.locationAttributes.weatherDataAttributeLocation.lon;
+        this.sunday = new ArrayList<>();
+        this.monday = new ArrayList<>();
+        this.tuesday = new ArrayList<>();
+        this.wednesday = new ArrayList<>();
+        this.thursday = new ArrayList<>();
+        this.friday = new ArrayList<>();
+        this.saturday = new ArrayList<>();
+        this.days = new ArrayList<>();
+        this.days.add(monday);
+        this.days.add(tuesday);
+        this.days.add(wednesday);
+        this.days.add(thursday);
+        this.days.add(friday);
+        this.days.add(saturday);
+        this.days.add(sunday);
+
         //this.info = populateInfo(this.locationId);
         try {
             this.info = localFlag ? populateLocalInfo(this.locationId) : populateInfo(this.locationId);
@@ -56,6 +86,28 @@ public class WeatherInfo {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH");
         SimpleDateFormat formatDay = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (WeatherDataAtrributePeriod weatherDataAtrributePeriod : info.locationAttributes.weatherDataAttributeLocation.period) {
+            weatherDataAtrributePeriod.rep.forEach(e -> {
+                Date date = null;
+                try {
+                    date = format.parse(weatherDataAtrributePeriod.value.substring(0, 10) + "-" + (Integer.parseInt(e.minAfterMidnight) / 60));
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                }
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                switch (cal.get(Calendar.DAY_OF_WEEK)) {
+                    case 0: sunday.add(new Day(DayofTheWeek.SUNDAY, date, e)); break;
+                    case 1: monday.add(new Day(DayofTheWeek.MONDAY, date, e)); break;
+                    case 2: tuesday.add(new Day(DayofTheWeek.TUESDAY, date, e)); break;
+                    case 3: wednesday.add(new Day(DayofTheWeek.WEDNESDAY, date, e)); break;
+                    case 4: thursday.add(new Day(DayofTheWeek.THURSDAY, date, e)); break;
+                    case 5: friday.add(new Day(DayofTheWeek.FRIDAY, date, e)); break;
+                    case 6: saturday.add(new Day(DayofTheWeek.SATURDAY, date, e)); break;
+                }
+            });
+        }
 
         for (WeatherDataAtrributePeriod p : info.locationAttributes.weatherDataAttributeLocation.period) {
 
@@ -150,6 +202,34 @@ public class WeatherInfo {
         return new WeatherSiteRep();
     }
 
+
+    public ArrayList<Day> getDayHours(DayofTheWeek day) {
+        switch (day) {
+            case SUNDAY -> {
+                return (ArrayList<Day>) sunday.subList(1, sunday.size());
+            }
+            case MONDAY -> {
+                return (ArrayList<Day>) monday.subList(1, monday.size());
+            }
+            case TUESDAY -> {
+                return (ArrayList<Day>) tuesday.subList(1, tuesday.size());
+            }
+            case WEDNESDAY -> {
+                return (ArrayList<Day>) wednesday.subList(1, wednesday.size());
+            }
+            case THURSDAY -> {
+                return (ArrayList<Day>) thursday.subList(1, thursday.size());
+            }
+            case FRIDAY -> {
+                return (ArrayList<Day>) friday.subList(1, friday.size());
+            }
+            case SATURDAY -> {
+                return (ArrayList<Day>) saturday.subList(1, saturday.size());
+            }
+        }
+        return null;
+    }
+  
     private WeatherSiteRep populateLocalInfo(String locationId) {
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -192,6 +272,49 @@ public class WeatherInfo {
         return keys;
     }
 
+    public ArrayList<Day> getMonday() {
+        return monday;
+    }
+
+    public ArrayList<Day> getTuesday() {
+        return tuesday;
+    }
+
+    public ArrayList<Day> getWednesday() {
+        return wednesday;
+    }
+
+    public ArrayList<Day> getThursday() {
+        return thursday;
+    }
+
+    public ArrayList<Day> getFriday() {
+        return friday;
+    }
+
+    public ArrayList<Day> getSaturday() {
+        return saturday;
+    }
+
+    public ArrayList<Day> getSunday() {
+        return sunday;
+    }
+
+    public ArrayList<ArrayList<Day>> getDays() {
+        return days;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public String getLon() {
+        return lon;
+    }
+     public String getApiKey() {
+        return System.getenv("MAP_API_KEY");
+     }
+
     public Set<String> getListOfID() {
         return this.idAndLocations.keySet();
     }
@@ -199,4 +322,5 @@ public class WeatherInfo {
     public HashMap<String, Locations> getIdAndLocations() {
         return idAndLocations;
     }
+
 }

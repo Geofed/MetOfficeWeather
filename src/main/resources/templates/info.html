@@ -4,19 +4,22 @@
       layout:decorate="layout">
 
     <!--@thymesVar id="weatherInfo" type="training.metofficeweather.web.WeatherInfo"-->
-<!---
-https://getbootstrap.com/docs/5.1/components/card/
-Cards with icons might looks cooler and be more readable
-Also graphs?
---->
-
-
     <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
         <title>Weather Information</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+              rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+                integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+                crossorigin=""></script>
         <style>
-            /*
+            .extra-info {
+                color: grey;
+                font-size: x-small;
+            }
+             /*
             dropdown portion starts
              */
             #myInput:focus {outline: 3px solid #ddd;}
@@ -43,9 +46,10 @@ Also graphs?
         </style>
     </head>
     <body>
-
     <div th:insert="fragments/navbar :: navbar"></div>
-
+    </head>
+    <body>
+    <div th:insert="fragments/navbar :: navbar"></div>
         <div layout:fragment="content" class="container body-content">
             <h2>Weather Information</h2>
             <!--drop down to do searching-->
@@ -66,110 +70,20 @@ Also graphs?
                 <p>You entered location id <span th:text="${weatherInfo.locationId}"></span></p>
                 <p>You entered location name <span th:text="${weatherInfo.getLocationName()}"></span></p>
             </div>
-                <div class="card-group" id="card-group">
-            </div>
-            <div>
-                <div class="more-info bg-light rounded-3 collapse" id="moredetails">
-                    Stuff that needs to be hidden
-                    </div>
-            </div>
-        </div>
-        </div>
-    <script th:inline="javascript">
-       let weatherReps = /*[[${weatherInfo}]]*/ ["a", "b"];
-       let monday = []
-       let tuesday = []
-       let wednesday = []
-       let thursday = []
-       let friday = []
-       let saturday = []
-       let sunday = []
-       let dates = Object.keys(weatherReps.weatherReps)
-       dates.forEach(e => {
-           dateobj = new Date(e)
-           console.log(dateobj)
-           switch (dateobj.getDay()) {
-               case 0:
-                   sunday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 1:
-                   monday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 2:
-                   tuesday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 3:
-                   wednesday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 4:
-                   thursday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 5:
-                   friday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 6:
-                   saturday.push(weatherReps.weatherReps[e]);
-                   break;
-           }
-       });
-
-       let week = { "Monday": monday, "Tuesday": tuesday, "Wednesday": wednesday, "Thursday": thursday, "Friday": friday, "Saturday": saturday, "Sunday": sunday };
-
-          function templateCard(day, data) {
-              return `
-          <div class="card" id="${day}-card">
-               <div class="card-body">
-               <h5 class="card-title">${day}</h5>
-           <p class="card-text">Temp: ${data.T}</p>
-           <p class="card-text">Feels Like: ${data.F}</p>
-           <p class="card-text">Humidity: ${data.H}</p>
-           <p class="card-text">Windspeed: ${data.S}</p>
-       </div>
-           <div class="card-footer">
-               <button class="btn btn-primary" data-bs-toggle="collapse" type="button" data-bs-target="#${day}moredetail" aria-expanded="false" aria-controls="moredetail">Toggle more details</button>
+            <div class="row">
                 <div class="col">
-                <div class="collapse multi-collapse" id="${day}moredetail">
-                  <div class="card card-body">
-                    Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                  </div>
+                    <div th:each="day: ${weatherInfo.getDays()}">
+                        <div th:if="${!day.isEmpty()}">
+                              <div th:insert="fragments/card :: card(${day[0].getStringDate()}, ${day[0].getDayOfTheWeek()}, ${day[0].data}, ${weatherInfo.getMonday()}, ${day[0].getIcon()})">
+                        </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-               <small class="text-muted">Last updated 3 mins ago</small>
-           </div>
-       </div>
-       `
-          }
-
-       let cardgroup = document.getElementById("card-group")
-       Object.keys(week).forEach(e => {
-           if (week[e][0] !== undefined) {
-               console.log(week[e][0])
-               cardgroup.insertAdjacentHTML("beforeend", templateCard(e, week[e][0]))
-           }
-       });
-// portion for dropdown
-       function myFunction() {
-           document.getElementById("myDropdown").classList.toggle("show");
-       }
-
-       function filterFunction() {
-           var input, filter, ul, li, a, i;
-           input = document.getElementById("myInput");
-           filter = input.value.toUpperCase();
-           div = document.getElementById("myDropdown");
-           a = div.getElementsByTagName("a");
-
-
-           for (i = 0; i < a.length; i++) {
-               txtValue = a[i].textContent || a[i].innerText;
-               if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                   a[i].style.display = "";
-               } else {
-                   a[i].style.display = "none";
-               }
-           }
-       }
-// end of portion for dropdown
-    </script>
+                <div class="col">
+                    <p>Maps and graphs and stuff are meant to go here</p>
+                </div>
+            </div>
+        </div>
+        </div>
     </body>
 </html>

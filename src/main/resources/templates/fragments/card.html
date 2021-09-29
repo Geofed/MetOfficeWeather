@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="card(date, dayOfWeek, data, restOfDayData, icon)">
+    <div class="card mt-2" th:id="${dayOfWeek}+'-card'">
+        <div class="card-body">
+            <p class="card-title" th:text="${date}">day</p>
+            <div class="row mt-4 mb-4">
+                <div class="col">
+                    <h1 class="ms-2" style="font-size: 60px" th:utext="${icon}"></h1>
+                </div>
+                <div class="col">
+                    <h2 class="card-text" style="text-align: right" th:text="${data.temp}+'ºC'">${data.temp}</h2>
+                    <p class="card-text" style="color:grey; text-align: right" th:text="'Feels like '+${data.feelsLike}+'ºC'">Feels Like: ${data.feelsLike}</p>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row row-cols-3">
+                    <div class="col extra-info" th:text="'Precip: '+${data.precipitationPercent}+'%'"></div>
+                    <div class="col extra-info" th:text="'Wind Direction: '+${data.windDirection}"></div>
+                    <div class="col extra-info" th:text="'UV Index: '+${data.solarUvIndex}"></div>
+                    <div class="col extra-info" th:text="'Wind Speed: '+${data.gustSpeed}+'MPH'"></div>
+                    <div class="col extra-info" th:text="'Visibility: '+${data.visibility}+'%'"></div>
+                    <div class="col extra-info" th:text="'Humidity: '+${data.humidity}+'%'"></div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer container">
+            <div th:id="${dayOfWeek}+'moredetail'" class="collapse row row-cols-1">
+                <div class="col card card-body mt-2" th:each="hour: ${restOfDayData}">
+                    <div class="row row-cols-2">
+                        <div class="col" th:text="${hour.getStringTime()}"></div>
+                        <div class="col" style="text-align: right" th:text="${hour.data.temp}+'ºC'"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary mt-2" data-bs-toggle="collapse" type="button" th:data-bs-target="'#'+${dayOfWeek}+'moredetail'" aria-expanded="false" aria-controls="${day}moredetail">Toggle more details</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
