@@ -47,13 +47,7 @@
     <title>Home page</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid"><a class="navbar-brand">MetWeather</a></div>
-    <form class="d-flex me-2" id="messageForm" th:action="@{/weatherInfo}" method="get">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="locationId">
-        <button class="btn btn-success" type="submit">Search</button>
-    </form>
-</nav>
+<div th:insert="fragments/navbar :: navbar"></div>
 <div layout:fragment="content" class="container body-content">
     <div class="parent">
         <div class="p-5 mb-4 mt-4 bg-light rounded-3 jumbo">
@@ -78,7 +72,15 @@
                 <tbody>
                 <tr th:each="location: ${locations}">
                     <th scope="row" th:text="${location.id}"></th>
-                    <td th:text="${location.name}"></td>
+
+                    <td>
+                        <form class="d-flex me-2" id="WeatherForm" th:action="@{/weatherInfo}" method="get">
+                            <input type="text" style="display:none" th:value="${location.id}" name="locationId">
+                            <button type="${location.name}" th:text="${location.name}" class="btn btn-primary">Primary</button>
+                        </form>
+<!--                        <button type="${location.name}" th:text="${location.name}" class="btn btn-primary">Primary</button>-->
+                    </td>
+<!--                    <td th:text="${location.name}"></td>-->
                     <td th:text="${location.region}"></td>
                     <td th:text="${location.longitude}"></td>
                     <td th:text="${location.latitude}"></td>
@@ -191,6 +193,12 @@
             console.log(e)
         })
     }
+
+    mymap.on('click', function(e) {
+
+        window.location.href = "/?longitude=" + e.latlng.lng + "&latitude=" + e.latlng.lat;
+
+    });
 </script>
 </body>
 </html>

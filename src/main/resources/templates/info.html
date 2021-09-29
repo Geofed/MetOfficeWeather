@@ -19,15 +19,56 @@
                 color: grey;
                 font-size: x-small;
             }
-            #mapid { height: 650px; }
+             /*
+            dropdown portion starts
+             */
+            #myInput:focus {outline: 3px solid #ddd;}
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f6f6f6;
+                min-width: 230px;
+                overflow: auto;
+                border: 1px solid #ddd;
+                z-index: 1;
+            }
+
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+            .show {display: block;}
+            /*
+            dropdown portion ends
+             */
         </style>
+    </head>
+    <body>
+    <div th:insert="fragments/navbar :: navbar"></div>
     </head>
     <body>
     <div th:insert="fragments/navbar :: navbar"></div>
         <div layout:fragment="content" class="container body-content">
             <h2>Weather Information</h2>
+            <!--drop down to do searching-->
+            <div class="dropdown" >
+                <button onclick="myFunction()" class="btn btn-success">Dropdown Search</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <form class="form-inline my-2 my-lg-0">
+                        <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+                        <div class="menu-item" th:each="keyID: ${weatherInfo.getListOfID()}">
+                            <a th:href="@{'/weatherInfo?locationId=' + ${keyID}}"> <span th:text="${weatherInfo.getIdAndLocations().get(keyID).name}"></span></a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--end of portion for dropdown-->
+
             <div>
                 <p>You entered location id <span th:text="${weatherInfo.locationId}"></span></p>
+                <p>You entered location name <span th:text="${weatherInfo.getLocationName()}"></span></p>
             </div>
             <div class="row">
                 <div class="col">
@@ -44,21 +85,5 @@
             </div>
         </div>
         </div>
-    <script th:inline="javascript">
-        /*
-        let mymap = L.map('mapid').setView([54.730, -2.925], 6);
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox/streets-v11',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: /*[[${weatherInfo.getApiKey()}]]*/ 'apikey'
-        }).addTo(mymap);
-        let lat = /*[[${weatherInfo.getLat()}]]*/ 'lat'
-        let lon = /*[[${weatherInfo.getLon()}]]*/ 'lon'
-        let marker = L.marker([lat, lon]).addTo(mymap);
-        */
-    </script>
     </body>
 </html>
