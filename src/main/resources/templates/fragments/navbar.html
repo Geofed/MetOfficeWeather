@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" th:fragment="navbar">
+    <div class="container-fluid"><a class="navbar-brand">MetWeather</a></div>
+    <form class="d-flex me-2" id="messageForm" th:action="@{/weatherInfo}" method="get">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="locationId">
+        <button class="btn btn-success" type="submit">Search</button>
+    </form>
+</nav>
+</body>
+</html>
