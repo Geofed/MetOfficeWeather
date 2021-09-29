@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="card(date, dayOfWeek, data, restOfDayData)">
-    <div class="card" th:id="${dayOfWeek}+'-card'">
+<div th:fragment="card(date, dayOfWeek, data, restOfDayData, icon)">
+    <div class="card mt-2" th:id="${dayOfWeek}+'-card'">
         <div class="card-body">
             <p class="card-title" th:text="${date}">day</p>
             <div class="row mt-4 mb-4">
                 <div class="col">
-                    <h1>Icon</h1>
+                    <h1 class="ms-2" style="font-size: 60px" th:utext="${icon}"></h1>
                 </div>
                 <div class="col">
                     <h2 class="card-text" style="text-align: right" th:text="${data.temp}+'ºC'">${data.temp}</h2>

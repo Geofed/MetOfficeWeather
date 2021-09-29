@@ -22,11 +22,15 @@ public class WeatherInfo {
     private ArrayList<Day> saturday;
     private ArrayList<Day> sunday;
     private ArrayList<ArrayList<Day>> days;
+    private String lat;
+    private String lon;
 
     public WeatherInfo(String locationId, String apiKey) {
         this.locationId = locationId;
         //this.apiKey = apiKey;
         this.info = populateInfo(locationId);
+        this.lat = info.locationAttributes.weatherDataAttributeLocation.lat;
+        this.lon = info.locationAttributes.weatherDataAttributeLocation.lon;
         this.sunday = new ArrayList<>();
         this.monday = new ArrayList<>();
         this.tuesday = new ArrayList<>();
@@ -181,4 +185,15 @@ public class WeatherInfo {
     public ArrayList<ArrayList<Day>> getDays() {
         return days;
     }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public String getLon() {
+        return lon;
+    }
+     public String getApiKey() {
+        return System.getenv("MAP_API_KEY");
+     }
 }

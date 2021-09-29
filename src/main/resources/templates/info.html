@@ -5,16 +5,21 @@
 
     <!--@thymesVar id="weatherInfo" type="training.metofficeweather.web.WeatherInfo"-->
     <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
         <title>Weather Information</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
               rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+                integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+                crossorigin=""></script>
         <style>
             .extra-info {
                 color: grey;
                 font-size: x-small;
             }
+            #mapid { height: 650px; }
         </style>
     </head>
     <body>
@@ -26,14 +31,34 @@
             </div>
             <div class="row">
                 <div class="col">
-<!--                    <div th:each="day: ${weatherInfo.days}" th:insert="fragments/card :: card(${day[0].getStringDate()}, ${day[0].getDayOfTheWeek()}, ${weatherInfo.getMonday()[0].data}, ${weatherInfo.getMonday()})">-->
-                    <div th:each="day: ${weatherInfo.days}" th:text="${day}"></div>
+                    <div th:each="day: ${weatherInfo.getDays()}">
+                        <div th:if="${!day.isEmpty()}">
+                              <div th:insert="fragments/card :: card(${day[0].getStringDate()}, ${day[0].getDayOfTheWeek()}, ${day[0].data}, ${weatherInfo.getMonday()}, ${day[0].getIcon()})">
+                        </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col">
-
+                    <p>Maps and graphs and stuff are meant to go here</p>
                 </div>
             </div>
         </div>
         </div>
+    <script th:inline="javascript">
+        /*
+        let mymap = L.map('mapid').setView([54.730, -2.925], 6);
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: /*[[${weatherInfo.getApiKey()}]]*/ 'apikey'
+        }).addTo(mymap);
+        let lat = /*[[${weatherInfo.getLat()}]]*/ 'lat'
+        let lon = /*[[${weatherInfo.getLon()}]]*/ 'lon'
+        let marker = L.marker([lat, lon]).addTo(mymap);
+        */
+    </script>
     </body>
 </html>
