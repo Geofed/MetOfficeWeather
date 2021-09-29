@@ -19,3 +19,8 @@ Independent copy of MetOffice Java Bootcamp exercise The main branch is a starti
 * Return data
   * [X] pretty print
   * [ ] print location-specific weather forecast
+
+
+
+Make more general searching
+Use js libraries and cards to make the data more readable

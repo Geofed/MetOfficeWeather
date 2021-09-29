@@ -24,6 +24,11 @@ public class WeatherInfo {
     private HashMap<String, Locations> nameAndLocations = new HashMap<>();
     private HashMap<Date, WeatherDataAttributeRep> weatherReps = new HashMap<Date, WeatherDataAttributeRep>();
 
+    // These Hash Maps contain key: day in date format, value: Integer of degrees Celsius. these are different to the Date key above as they don't store time of day.
+    private HashMap<Date, Integer> currentLocMaxTemp = new HashMap<>();
+    private HashMap<Date, Integer> currentLocMinTemp = new HashMap<>();
+
+    private HashMap<String, Locations> idAndLocations = new HashMap<>();
     public WeatherInfo(String initLocationId, String apiKey) {
         initLocationId = initLocationId.trim();
 
@@ -50,27 +55,35 @@ public class WeatherInfo {
         }
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH");
+        SimpleDateFormat formatDay = new SimpleDateFormat("yyyy-MM-dd");
 
         for (WeatherDataAtrributePeriod p : info.locationAttributes.weatherDataAttributeLocation.period) {
+
+            Integer tempTempMax = -5000;
+            Integer tempTempMin = 5000;
+
             for (WeatherDataAttributeRep r : p.rep) {
                 try {
                     weatherReps.put(format.parse(p.value.substring(0, 10) + "-" + (Integer.parseInt(r.minAfterMidnight) / 60)), r);
+
+                    tempTempMax = (tempTempMax < Integer.parseInt(r.temp)) ? Integer.parseInt(r.temp) : tempTempMax;
+                    tempTempMin = (tempTempMin > Integer.parseInt(r.temp)) ? Integer.parseInt(r.temp) : tempTempMin;
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
-        }
-/*
-        weatherReps.keySet().stream().sorted().forEach( d -> {
-            System.out.println(d.toString() + " " + weatherReps.get(d).toString());
-        });
- */
-/*
-        for (String name: nameAndLocations.keySet()) {
-            System.out.println(nameAndLocations.get(name).id);
-        }
 
- */
+            try {
+
+                currentLocMaxTemp.put(formatDay.parse(p.value.substring(0, 10)), tempTempMax);
+                currentLocMinTemp.put(formatDay.parse(p.value.substring(0, 10)), tempTempMin);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     private String checkInput(String initLocationId) {
@@ -100,8 +113,10 @@ public class WeatherInfo {
             ObjectMapper mapper = new ObjectMapper();
             LocationsRoot locationsRoot = mapper.readValue(responseStream, LocationsRoot.class);
 
-            // hashmap of < NAME , id > both entries are strings
+            // hashmap of < NAME , location>
             locationsRoot.locations.location.forEach(e -> nameAndLocations.put(e.name.toUpperCase(Locale.ROOT), e));
+            // hashmap of <id, location>
+            locationsRoot.locations.location.forEach(e -> idAndLocations.put(e.id, e));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,5 +190,13 @@ public class WeatherInfo {
         List<Date> keys = new ArrayList<>(weatherReps.keySet());
         Collections.sort(keys);
         return keys;
+    }
+
+    public Set<String> getListOfID() {
+        return this.idAndLocations.keySet();
+    }
+
+    public HashMap<String, Locations> getIdAndLocations() {
+        return idAndLocations;
     }
 }
