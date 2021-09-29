@@ -4,124 +4,36 @@
       layout:decorate="layout">
 
     <!--@thymesVar id="weatherInfo" type="training.metofficeweather.web.WeatherInfo"-->
-<!---
-https://getbootstrap.com/docs/5.1/components/card/
-Cards with icons might looks cooler and be more readable
-Also graphs?
---->
-
-
     <head>
         <title>Weather Information</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+              rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <style>
+            .extra-info {
+                color: grey;
+                font-size: x-small;
+            }
+        </style>
     </head>
     <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid"><a class="navbar-brand">MetWeather</a></div>
-        <form class="d-flex me-2" id="messageForm" th:action="@{/weatherInfo}" method="get">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="locationId">
-            <button class="btn btn-success" type="submit">Search</button>
-        </form>
-    </nav>
+    <div th:insert="fragments/navbar :: navbar"></div>
         <div layout:fragment="content" class="container body-content">
             <h2>Weather Information</h2>
             <div>
                 <p>You entered location id <span th:text="${weatherInfo.locationId}"></span></p>
             </div>
-                <div class="card-group" id="card-group">
-            </div>
-            <div>
-                <div class="more-info bg-light rounded-3" id="moredetails">
-                    Stuff that needs to be hidden
-                    </div>
+            <div class="row">
+                <div class="col">
+<!--                    <div th:each="day: ${weatherInfo.days}" th:insert="fragments/card :: card(${day[0].getStringDate()}, ${day[0].getDayOfTheWeek()}, ${weatherInfo.getMonday()[0].data}, ${weatherInfo.getMonday()})">-->
+                    <div th:each="day: ${weatherInfo.days}" th:text="${day}"></div>
+                </div>
+                <div class="col">
+
+                </div>
             </div>
         </div>
         </div>
-    <script th:inline="javascript">
-       let weatherReps = /*[[${weatherInfo}]]*/ ["a", "b"];
-       let monday = []
-       let tuesday = []
-       let wednesday = []
-       let thursday = []
-       let friday = []
-       let saturday = []
-       let sunday = []
-       let dates = Object.keys(weatherReps.weatherReps)
-       dates.forEach(e => {
-           dateobj = new Date(e)
-           console.log(dateobj)
-           switch (dateobj.getDay()) {
-               case 0:
-                   sunday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 1:
-                   monday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 2:
-                   tuesday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 3:
-                   wednesday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 4:
-                   thursday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 5:
-                   friday.push(weatherReps.weatherReps[e]);
-                   break;
-               case 6:
-                   saturday.push(weatherReps.weatherReps[e]);
-                   break;
-           }
-       });
-
-       let week = { "Monday": monday, "Tuesday": tuesday, "Wednesday": wednesday, "Thursday": thursday, "Friday": friday, "Saturday": saturday, "Sunday": sunday };
-
-          function templateCard(day, data) {
-              return `
-          <div class="card" id="${day}-card">
-               <div class="card-body">
-               <h5 class="card-title">${day}</h5>
-           <p class="card-text">Temp: ${data.T}</p>
-           <p class="card-text">Feels Like: ${data.F}</p>
-           <p class="card-text">Humidity: ${data.H}</p>
-           <p class="card-text">Windspeed: ${data.S}</p>
-       </div>
-           <div class="card-footer">
-               <button class="btn btn-primary" data-bs-toggle="collapse" type="button" data-bs-target="#${day}moredetail" aria-expanded="false" aria-controls="${day}moredetail">Toggle more details</button>
-           </div>
-       </div>
-       `
-          }
-
-      function templateMoreInfo(day, data) {
-          return `
-          <div class="card" id="${day}-card">
-              <div class="card-body">
-                  <h5 class="card-title">${day}</h5>
-                  <p class="card-text">Temp: ${data.T}</p>
-                  <p class="card-text">Feels Like: ${data.F}</p>
-                  <p class="card-text">Humidity: ${data.H}</p>
-                  <p class="card-text">Windspeed: ${data.S}</p>
-              </div>
-          </div>
-          `
-      }
-
-       let cardgroup = document.getElementById("card-group")
-       let moredetail = document.getElementById("moredetails")
-       Object.keys(week).forEach(e => {
-           if (week[e][0] !== undefined) {
-               console.log(week[e][0])
-               cardgroup.insertAdjacentHTML("beforeend", templateCard(e, week[e][0]))
-               moredetail.insertAdjacentHTML("beforeend", `<div id="${e}moredetail" class="collapse"`)
-               let daymoredetail = document.getElementById(`${e}moredetail`)
-               week[e].slice(1, week[e].length).forEach(f => {
-                   daymoredetail.insertAdjacentHTML("beforeend", templateMoreInfo(e, f))
-               })
-           }
-       });
-    </script>
     </body>
 </html>
