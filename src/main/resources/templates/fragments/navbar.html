@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" th:fragment="navbar">
+    <div class="container-fluid"><a class="navbar-brand">MetWeather</a></div>
+    <form class="d-flex me-2" id="messageForm" th:action="@{/weatherInfo}" method="get">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="locationId">
+        <button class="btn btn-success" type="submit">Search</button>
+    </form>
+    <div class="dropdown" >
+        <button onclick="myFunction()" class="btn btn-success">Dropdown</button>
+        <div id="myDropdown" class="dropdown-content">
+            <form class="form-inline my-2 my-lg-0">
+                <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+                <div class="menu-item" th:each="keyID: ${weatherInfo.getListOfID()}">
+                    <a th:href="@{'/weatherInfo?locationId=' + ${keyID}}"> <span th:text="${weatherInfo.getIdAndLocations().get(keyID).name}"></span></a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--end of portion for dropdown-->
+</nav>
+</body>
+</html>
