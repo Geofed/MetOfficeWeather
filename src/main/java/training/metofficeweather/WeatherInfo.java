@@ -23,7 +23,7 @@ public class WeatherInfo {
     private String locationName;
     private HashMap<String, Locations> nameAndLocations = new HashMap<>();
     private HashMap<Date, WeatherDataAttributeRep> weatherReps = new HashMap<Date, WeatherDataAttributeRep>();
-
+    private HashMap<String, Locations> idAndLocations = new HashMap<>();
     public WeatherInfo(String initLocationId, String apiKey) {
         initLocationId = initLocationId.trim();
 
@@ -100,8 +100,10 @@ public class WeatherInfo {
             ObjectMapper mapper = new ObjectMapper();
             LocationsRoot locationsRoot = mapper.readValue(responseStream, LocationsRoot.class);
 
-            // hashmap of < NAME , id > both entries are strings
+            // hashmap of < NAME , location>
             locationsRoot.locations.location.forEach(e -> nameAndLocations.put(e.name.toUpperCase(Locale.ROOT), e));
+            // hashmap of <id, location>
+            locationsRoot.locations.location.forEach(e -> idAndLocations.put(e.id, e));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,5 +177,13 @@ public class WeatherInfo {
         List<Date> keys = new ArrayList<>(weatherReps.keySet());
         Collections.sort(keys);
         return keys;
+    }
+
+    public Set<String> getListOfID() {
+        return this.idAndLocations.keySet();
+    }
+
+    public HashMap<String, Locations> getIdAndLocations() {
+        return idAndLocations;
     }
 }
