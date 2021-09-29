@@ -28,7 +28,11 @@ public class WeatherInfo {
         initLocationId = initLocationId.trim();
 
         // call function to fill the nameandlocation map
-        initMap();
+        if (localFlag) {
+            initLocalMap();
+        } else {
+            initMap();
+        }
 
         // check input, final value of locationId is expected to be numbers in string form
         this.locationId = checkInput(initLocationId);
@@ -104,6 +108,16 @@ public class WeatherInfo {
 
     }
 
+    private void initLocalMap() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            LocationsRoot locationsRoot = mapper.readValue(Paths.get("Data/sitelist.json").toFile(), LocationsRoot.class);
+            // hashmap of < NAME , id > both entries are strings
+            locationsRoot.locations.location.forEach(e -> nameAndLocations.put(e.name.toUpperCase(Locale.ROOT), e));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private WeatherSiteRep populateInfo(String locationId) {
         try {
