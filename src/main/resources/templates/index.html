@@ -196,19 +196,11 @@
         })
     }
 
-    function onMapClick(e) {
-        alert("You clicked the map at " + e.latlng);
-        var formData = new FormData();
+    mymap.on('click', function(e) {
 
-        // Change this to be actual form datat
-        formData.append("username", "Groucho");
-        formData.append("accountnum", 123456);
-        var request = new XMLHttpRequest();
-        request.open("GET", "http://foo.com/submitform.php"); // This MUST be a get
-        request.send(formData);
-    }
+        window.location.href = "/?longitude=" + e.latlng.lng + "&latitude=" + e.latlng.lat;
 
-    mymap.on('click', onMapClick);
+    });
 </script>
 </body>
 </html>

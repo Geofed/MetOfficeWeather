@@ -9,6 +9,9 @@ import org.springframework.web.servlet.ModelAndView;
 import training.metofficeweather.data.Locations;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -22,13 +25,27 @@ import static training.metofficeweather.WeatherApplication.localFlag;
 public class WeatherController {
 
     @GetMapping
-    String getLocations(Model model, @RequestParam("page") Optional<Integer> optionalpage, @RequestParam("placeName") Optional<String> placeName, @RequestParam("regionSelector") Optional<String> region, @RequestParam("seaLevel") Optional<Integer> seaLevel) {
+    String getLocations(Model model, @RequestParam("page") Optional<Integer> optionalpage, @RequestParam("range") Optional<Integer> range, @RequestParam("latitude") Optional<String> latitude, @RequestParam("longitude") Optional<String> longitude, @RequestParam("placeName") Optional<String> placeName, @RequestParam("regionSelector") Optional<String> region, @RequestParam("seaLevel") Optional<Integer> seaLevel) {
         int page = optionalpage.orElse(0);
         List<Locations> locations = null;
         try {
             locations = localFlag ? InitLocalJson().locations.location : InitJson().locations.location;
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if (longitude.isPresent() && latitude.isPresent()) {
+            BigDecimal r = new BigDecimal(range.orElse(2)).divide(new BigDecimal(10));
+            BigDecimal clickLong = new BigDecimal(longitude.get());
+            BigDecimal clickLat = new BigDecimal(latitude.get());
+
+            locations = locations.stream()
+                    .filter(e -> ( new BigDecimal(e.latitude).compareTo(clickLat.add(r)) < 0
+                    && new BigDecimal(e.latitude).compareTo(clickLat.subtract(r)) > 0
+                    && new BigDecimal(e.longitude).compareTo(clickLong.add(r)) < 0
+                            && new BigDecimal(e.longitude).compareTo(clickLong.subtract(r)) > 0 )) // if anyone knows how to fix this indentation pls help
+
+                    .collect(Collectors.toList());
+            System.out.println((long) locations.size());
         }
         if (placeName.isPresent()) {
             locations = locations.stream()
